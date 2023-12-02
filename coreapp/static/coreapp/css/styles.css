@@ -681,7 +681,7 @@ th {
 }
 
 #landingPage {
-  background-image: url("../images/image1.png");
+  background-image: url("../images/image1(1).png");
   background-size: cover; /* Set to cover the entire container */
   background-repeat: no-repeat;
   min-height: 100vh; 
@@ -883,19 +883,20 @@ footer a:hover {
 }
 
 #untp1 {
-  background-image: url("../images/Rectangle1.png");
+  background-image: url("../images/Model1/IMG_20231004_133241_541.jpg");
 }
 
 #untp2 {
-  background-image: url("../images/Rectangle2.png");
+  background-image: url("../images/Model2/IMG_20231004_133857_401.jpg");
 }
 
 #untp3 {
-  background-image: url("../images/Rectangle3.png");
-}
+  background-image: url("../images/Model3/IMG_20231004_134200_770.jpg");
 
+}
 #untp4 {
-  background-image: url("../images/Rectangle4.png");
+  background-image: url("../images/Model4/IMG_20231004_135416_002.jpg");
+
 }
 
 .rowt {
@@ -914,11 +915,6 @@ footer a:hover {
   background-color: #ffff !important;
   font-weight: bold;
   font-family: 'Inter', sans-serif;  
-}
-
-.success-message {
-  background-color: #4CAF50 !important;
-  color: white;
 }
 
 .ampic {
