@@ -1,0 +1,64 @@
+{% extends "admins.html" %}
+{% load static %}
+{% block content %}
+    <div class="tntcon">
+        <div class="tntlist">All Tenants 
+            <span id="sort-btn">
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </span>
+        </div>        
+        <hr>
+        <table class="tnt">
+            <div class="action-button">
+                <a href="{% url 'creacc' %}" class="add-button">
+                    <img src="{% static 'coreapp/images/add-to-queue1.png' %}" alt="" class= "adtimg"> Add Account
+                </a>
+            </div>
+            <tr>
+                <th><div class="rounded-content">Name</div></th>
+                <th>Contact</th>   
+                <th>Unit Type</th>
+                <th>Action</th>
+            </tr>
+            {% for item in Tenants %}
+            <tr>
+                <td><div class="rounded-content">{{ item.tent_name }}</div></td>
+                <td>{{ item.tent_pnum }}</td>   
+                <td><div class="rounded-content">{{ item.unit_type }}</div></td>
+                <td><button class="delete-button" data-tent-id="{{ item.id }}">Delete</button></td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        document.querySelectorAll('.delete-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+        var tenantId = this.getAttribute('data-tent-id');  // Get the tenant ID from data-tent-id attribute
+        // Rest of your code..
+        if (confirm('Are you sure you want to delete this tenant?')) {
+            fetch(`/delete-tent/${tenantId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.parentElement.parentElement.remove();  // Remove the entire row
+                    alert('Unit deleted successfully.');
+                } else {
+                    alert('Failed to delete unit.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+});
+    </script>
+{% endblock %}

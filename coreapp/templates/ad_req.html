@@ -1,0 +1,116 @@
+{% extends "admins.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'coreapp/images/Ellipse2-1.png' %}">
+
+    <title>TRILC</title>
+</head>
+<body>
+    {% block content %}
+    <div class="tntcon">
+        <div class="tntlist">Requests<span></span></div>
+        <hr>
+        <div class="row grid-responsive" id="reqli">
+            {% for item in Booked %}
+            <div class="column page-heading" id="reqcol">
+                <div class="large-card" id="reqcard">
+                    <img src="{% static 'coreapp/images/image14-1.png' %}" alt="" class="reqimg">
+                    <div class="rounded-content">{{ item.name }}</div>
+                    <div><span>{{ item.unit }}</span> <span>{{ item.date }}</span></div>
+                    <button class="btnmodal" id="myBtn" data-id="{{ item.id }}" data-name="{{ item.name }}" data-unit="{{ item.unit }}" data-date="{{ item.date }}" data-email="{{ item.emel }}" data-pnum="{{ item.pnum }}">View</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="myModal" class="modal">
+        <form action="{% url 'req' %}" method="POST">
+        {% csrf_token %}    
+        <div class="modal-content">
+            <span class="close"></span>
+            <div class="modal-row" id="mdt">
+                <input type="hidden" id="emel" name="emel" value="">
+                <input type="hidden" id="custom_id" name="custom_id" value="some_value">
+                <div class="label">Name:</div>
+                <div class="value" id="name"></div>
+            </div>
+            <hr>
+            <div class="modal-row">
+                <div class="label">Unit:</div>
+                <div class="value" id="unit"></div>
+            </div>
+            <hr>
+            <div class="modal-row">
+                <div class="label">Phone Number:</div>
+                <div class="value" id="pnum"></div>
+            </div>
+            <hr>
+            <div class="modal-row">
+                <div class="label">Email:</div>
+                <div class="value" id="email"></div>
+            </div>
+            <hr>
+            <div class="modal-row">
+                <div class="label">Date:</div>
+                <div class="value" id="date"></div>
+            </div>
+            <div class="modal-row">
+                <button type="submit" name="action" value="decline">DECLINE</button>
+                <button type="submit" name="action" value="approve">APPROVE</button>
+            </div>
+                 
+        </form>
+        </div>
+    </div>
+    <script>
+        var modal = document.getElementById("myModal");
+        var modalContent = document.querySelector(".modal-content");
+        var btns = document.querySelectorAll(".btnmodal");
+        var span = document.getElementsByClassName("close")[0];
+    
+        // Attach click event to all buttons with class .btnmodal
+        btns.forEach(function(btn) {
+            btn.onclick = function() {
+                var name = this.getAttribute("data-name");
+                var unit = this.getAttribute("data-unit");
+                var date = this.getAttribute("data-date");
+                var emel = this.getAttribute("data-email");
+                var id = this.getAttribute("data-id");
+                var pnum = this.getAttribute("data-pnum");
+    
+                // Set modal content using the data attributes
+                document.getElementById("name").innerHTML = name;
+                document.getElementById("unit").innerHTML = unit;
+                document.getElementById("date").innerHTML = date;
+                document.getElementById("email").innerHTML = emel;
+                document.getElementById("pnum").innerHTML = pnum;
+                document.getElementById("custom_id").value = id;
+                document.getElementById("emel").value = emel; // Set the value of the hidden input for emel
+                modal.style.display = "block";
+            };
+        });
+    
+        span.onclick = function() {
+            modal.style.display = "none";
+        };
+    
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
+        {% endblock %}
+
+</body>
+</html>
+

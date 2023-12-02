@@ -1,0 +1,97 @@
+{% extends "admins.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRI-LC</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'coreapp/images/Ellipse2-1.png' %}">
+
+</head>
+<body>
+    {% block content %}
+    <div>
+        <div id="dashcon">
+            <div class="column page-heading">
+                <div class="large-card" id="dash">
+                    <img src="{% static 'coreapp/images/image3.png' %}" alt="">
+                    <div class="dtext">
+                        <div class="dtopt">{{ NumUnits }}</div>
+                        <div>Total Properties</div>
+                    </div>    
+                </div>
+            </div>
+            <div class="column page-heading">
+                <div class="large-card" id="dash">
+                    <img src="{% static 'coreapp/images/image4.png' %}" alt="">
+                    <div class="dtext">
+                        <div class="dtopt">{{ NumTenants }}</div>
+                        <div>Properties Rent</div>
+                    </div>    
+                </div>
+            </div>
+            <div class="column page-heading">
+                <div class="large-card" id="dash">
+                    <img src="{% static 'coreapp/images/image5-1.png' %}" alt="">
+                    <div class="dtext">
+                        <div class="dtopt" id="peso">{{ total_profit }}</div>
+                        <div>Property Sale</div>
+                    </div>    
+                </div>
+            </div>
+        </div>	
+        <div class= "dashrow">
+            <div class="dashcol">
+                <h4 style="display: flex; justify-content: start;">Request</h4>
+                {% for item in Booked|slice:":4" %}
+                <div class="dashreq" id="">
+                    <div class="card" id="reqdash">
+                    </div>
+                    <div class="reqcards" id="dash">
+                        <img src="{% static 'coreapp/images/image14-1.png' %}" alt="" class="reqimg">    
+                        <div class="dtext">
+                            <div class="colnem">{{ item.name }}</div>
+                            <div><span>{{ item.unit }}</span> <span>{{ item.date }}</span></div>
+                        </div>    
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="dashcol">                
+                <h4 style="display: flex; justify-content: start;">Property</h4>
+               {% for item in Prop|slice:":4" %}
+                <div class="dashreq" id="">
+                    <div class="card" id="reqdash">
+                    </div>
+                    <div class="reqcards" id="dash">
+                        <img src="{% static 'coreapp/images/Rectangle27.png' %}" alt="" class="proimg">    
+                        <div class="dtext">
+                            <div class="colnem">{{ item.unit_blt }}</div>
+                            <div>{{ item.availability_display }}</div>
+                        </div>    
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="dashcol">
+                <h4 style="display: flex; justify-content: start;">Tenant</h4>
+                {% for item in Tenants|slice:":4" %}
+                <div class="dashreq" id="">
+                    <div class="card" id="reqdash">
+                    </div>
+                    <div class="reqcards" id="dash">
+                        <img src="{% static 'coreapp/images/image14-1.png' %}" alt="" class="reqimg">    
+                        <div class="dtext">
+                            <div class="colnem">{{ item.tent_name }}</div>
+                            <div><span>{{ item.unit_type }}</span> <span>{{ item.date_joined }}</span></div>
+                        </div>    
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

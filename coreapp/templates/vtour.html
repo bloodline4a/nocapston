@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>360&deg; Image Gallery</title>
+    <meta name="description" content="360&deg; Image Gallery - A-Frame">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'coreapp/images/Ellipse2-1.png' %}">
+    <script src="{% static 'coreapp/js/script.js' %}"></script>
+    <style>
+       .aframe-container {
+            display: none; /* Center the container horizontally */
+        }
+      </style>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+    <script id="link" type="text/html">
+      <a-entity class="link"
+        geometry="primitive: plane; height: 1; width: 1"
+        material="shader: flat; src: ${thumb}"
+        event-set__mouseenter="scale: 1.2 1.2 1"
+        event-set__mouseleave="scale: 1 1 1"
+        event-set__click="_target: #image-360; _delay: 300; material.src: ${src}"
+        proxy-event="event: click; to: #image-360; as: fade"
+        sound="on: click; src: #click-sound"></a-entity>
+    </script>
+  </head>
+  <body>
+
+    <div class="unb" id="unit">
+      <div class="bnav">   
+        <div class="bleft">
+          <img src="{% static 'coreapp/images/Ellipse2-1.png' %}" alt="" class= "bimg">
+          <a href="{% url 'homepage' %}">TRI-LC ENTERPRISES</a>
+        </div>
+        <div class="bright">
+          <a href="{% url 'book' %}">BOOK</a>
+          <a href="{% url 'home' %}">LOGIN</a>
+          <a href="{% url 'contact' %}">CONTACTS</a>
+          <a href="{% url 'amnts' %}">AMENITIES</a>
+        </div>
+      </div>
+      <div class="tooltip" id="play-button-tooltip">To navigate through the Virtual Tour, please  <br> click the numbers "1, 2, 3, 4, 5, 6, 7, 8, 9."</div>
+      <h1 class="primt">PRIME SHOWROOM</h1>
+          <div class="untpic">
+            <div class="unt" id="untp1">
+              <i class="fa fa-play toggle-button" data-index="0" data-model="Model 1" aria-hidden="true"></i>
+            </div>
+          <div class="unt" id="untp2">
+            <i class="fa fa-play toggle-button" data-index="1" data-model="Model 2" aria-hidden="true"></i>
+          </div>
+          <div class="unt" id="untp3">
+              <i class="fa fa-play toggle-button" data-index="2" aria-hidden="true"></i>
+          </div>
+          <div class="unt" id="untp4">
+              <i class="fa fa-play toggle-button" data-index="3" aria-hidden="true"></i>
+          </div>
+        </div>
+        
+        {% include 'footer.html' %} 
+    </div>
+    <div class="aframe-container">
+        <a-scene>
+          <a-assets>
+            <img id="img0" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133241_541.jpg' %}">
+            <img id="img1" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133309_813.jpg' %}">
+            <img id="img2" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133334_364.jpg' %}">
+            <img id="img3" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133404_210.jpg' %}">
+            <img id="img4" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133431_983.jpg' %}">                
+            <img id="img5" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133453_969.jpg' %}">
+            <img id="img6" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133516_358.jpg' %}">
+            <img id="img7" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133541_511.jpg' %}">
+            <img id="img8" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133624_108.jpg' %}">
+            <img id="img9" crossorigin="anonymous" src="{% static 'coreapp/images/Model1/IMG_20231004_133804_467.jpg' %}">
+          </a-assets>
+        
+            <a-sky id="room0" radius="10" src="#img0" visible="true"></a-sky>
+            <a-sky id="room1" radius="10" src="#img1" visible="false"></a-sky>
+            <a-sky id="room2" radius="10" src="#img2" visible="false"></a-sky>
+            <a-sky id="room3" radius="10" src="#img3" visible="false"></a-sky>
+            <a-sky id="room4" radius="10" src="#img4" visible="false"></a-sky>
+            <a-sky id="room5" radius="10" src="#img5" visible="false"></a-sky>
+            <a-sky id="room6" radius="10" src="#img6" visible="false"></a-sky>
+            <a-sky id="room7" radius="10" src="#img7" visible="false"></a-sky>
+            <a-sky id="room8" radius="10" src="#img8" visible="false"></a-sky>
+            <a-sky id="room9" radius="10" src="#img9" visible="false"></a-sky> 
+            <a-entity link-to-book="targetUrl: {% url 'book' %}">
+                <a-entity geometry="primitive: plane; height: 1; width: 1" material="shader: flat; src: #your-image-source"></a-entity>
+            </a-entity>
+            <a-entity camera look-controls wasd-controls>
+                
+            </a-entity>
+        </a-scene>
+    </div>
+    <div class="aframe-container">
+      <a-scene class="scene2">
+        <a-assets>
+            <img id="model2-img0" crossorigin="anonymous" src="{% static 'coreapp/images/Model2/IMG_20231004_133857_401.jpg' %}">
+            <img id="model2-img1" crossorigin="anonymous" src="{% static 'coreapp/images/Model2/IMG_20231004_133931_476.jpg' %}">
+            <img id="model2-img2" crossorigin="anonymous" src="{% static 'coreapp/images/Model2/IMG_20231004_134005_579.jpg' %}">
+            <img id="model2-img3" crossorigin="anonymous" src="{% static 'coreapp/images/Model2/IMG_20231004_134021_234.jpg' %}">
+            <img id="model2-img4" crossorigin="anonymous" src="{% static 'coreapp/images/Model2/IMG_20231004_134038_454.jpg' %}">
+            <img id="model2-img5" crossorigin="anonymous" src="{% static 'coreapp/images/Model2/IMG_20231004_134051_773.jpg' %}">
+            <img id="model2-img6" crossorigin="anonymous" src="{% static 'coreapp/images/Model2/IMG_20231004_134109_674.jpg' %}">
+            <img id="model2-img7" crossorigin="anonymous" src="{% static 'coreapp/images/Model2/IMG_20231004_134122_721.jpg' %}">
+            <img id="model2-img8" crossorigin="anonymous" src="{% static 'coreapp/images/Model2/IMG_20231004_134139_612.jpg' %}">
+        </a-assets>
+        <a-sky id="model2-room0" radius="10" src="#model2-img0" visible="true"></a-sky>
+        <a-sky id="model2-room1" radius="10" src="#model2-img1" visible="false"></a-sky>
+        <a-sky id="model2-room2" radius="10" src="#model2-img2" visible="false"></a-sky>
+        <a-sky id="model2-room3" radius="10" src="#model2-img3" visible="false"></a-sky>
+        <a-sky id="model2-room4" radius="10" src="#model2-img4" visible="false"></a-sky>
+        <a-sky id="model2-room5" radius="10" src="#model2-img5" visible="false"></a-sky>
+        <a-sky id="model2-room6" radius="10" src="#model2-img6" visible="false"></a-sky>
+        <a-sky id="model2-room7" radius="10" src="#model2-img7" visible="false"></a-sky>
+        <a-sky id="model2-room8" radius="10" src="#model2-img8" visible="false"></a-sky>
+
+        <a-entity camera look-controls wasd-controls>
+        </a-entity>
+    </a-scene>
+    </div>
+    <div class="aframe-container">
+      <a-scene class="scene3">
+        <a-assets>
+            <img id="model3-img0" crossorigin="anonymous" src="{% static 'coreapp/images/Model3/IMG_20231004_134200_770.jpg' %}">
+            <img id="model3-img1" crossorigin="anonymous" src="{% static 'coreapp/images/Model3/IMG_20231004_134235_762.jpg' %}">
+            <img id="model3-img2" crossorigin="anonymous" src="{% static 'coreapp/images/Model3/IMG_20231004_134251_192.jpg' %}">
+            <img id="model3-img3" crossorigin="anonymous" src="{% static 'coreapp/images/Model3/IMG_20231004_134303_673.jpg' %}">
+            <img id="model3-img4" crossorigin="anonymous" src="{% static 'coreapp/images/Model3/IMG_20231004_134323_275.jpg' %}">
+            <img id="model3-img5" crossorigin="anonymous" src="{% static 'coreapp/images/Model3/IMG_20231004_134343_569.jpg' %}">
+            <img id="model3-img6" crossorigin="anonymous" src="{% static 'coreapp/images/Model3/IMG_20231004_134414_250.jpg' %}">
+            <img id="model3-img7" crossorigin="anonymous" src="{% static 'coreapp/images/Model3/IMG_20231004_134429_374.jpg' %}">
+            <img id="model3-img8" crossorigin="anonymous" src="{% static 'coreapp/images/Model3/IMG_20231004_134453_377.jpg' %}">
+        </a-assets>
+    
+        <a-sky id="model3-room0" radius="10" src="#model3-img0" visible="true"></a-sky>
+        <a-sky id="model3-room1" radius="10" src="#model3-img1" visible="false"></a-sky>
+        <a-sky id="model3-room2" radius="10" src="#model3-img2" visible="false"></a-sky>
+        <a-sky id="model3-room3" radius="10" src="#model3-img3" visible="false"></a-sky>
+        <a-sky id="model3-room4" radius="10" src="#model3-img4" visible="false"></a-sky>
+        <a-sky id="model3-room5" radius="10" src="#model3-img5" visible="false"></a-sky>
+        <a-sky id="model3-room6" radius="10" src="#model3-img6" visible="false"></a-sky>
+        <a-sky id="model3-room7" radius="10" src="#model3-img7" visible="false"></a-sky>
+        <a-sky id="model3-room8" radius="10" src="#model3-img8" visible="false"></a-sky>
+        <a-entity camera look-controls wasd-controls>
+        </a-entity>
+    </a-scene>
+    </div>
+    <div class="aframe-container">
+      <a-scene class="scene3">
+        <a-assets>
+            <img id="model4-img0" crossorigin="anonymous" src="{% static 'coreapp/images/Model4/IMG_20231004_134522_381.jpg' %}">
+            <img id="model4-img1" crossorigin="anonymous" src="{% static 'coreapp/images/Model4/IMG_20231004_134537_984.jpg' %}">
+            <img id="model4-img2" crossorigin="anonymous" src="{% static 'coreapp/images/Model4/IMG_20231004_134622_685.jpg' %}">
+            <img id="model4-img3" crossorigin="anonymous" src="{% static 'coreapp/images/Model4/IMG_20231004_134638_678.jpg' %}">
+            <img id="model4-img4" crossorigin="anonymous" src="{% static 'coreapp/images/Model4/IMG_20231004_134651_099.jpg' %}">
+            <img id="model4-img5" crossorigin="anonymous" src="{% static 'coreapp/images/Model4/IMG_20231004_134707_379.jpg' %}">
+            <img id="model4-img6" crossorigin="anonymous" src="{% static 'coreapp/images/Model4/IMG_20231004_134718_674.jpg' %}">
+            <img id="model4-img7" crossorigin="anonymous" src="{% static 'coreapp/images/Model4/IMG_20231004_134730_881.jpg' %}">
+            <img id="model4-img8" crossorigin="anonymous" src="{% static 'coreapp/images/Model4/IMG_20231004_135416_002.jpg' %}">
+        </a-assets>
+    
+        <a-sky id="model4-room0" radius="10" src="#model4-img0" visible="true"></a-sky>
+        <a-sky id="model4-room1" radius="10" src="#model4-img1" visible="false"></a-sky>
+        <a-sky id="model4-room2" radius="10" src="#model4-img2" visible="false"></a-sky>
+        <a-sky id="model4-room3" radius="10" src="#model4-img3" visible="false"></a-sky>
+        <a-sky id="model4-room4" radius="10" src="#model4-img4" visible="false"></a-sky>
+        <a-sky id="model4-room5" radius="10" src="#model4-img5" visible="false"></a-sky>
+        <a-sky id="model4-room6" radius="10" src="#model4-img6" visible="false"></a-sky>
+        <a-sky id="model4-room7" radius="10" src="#model4-img7" visible="false"></a-sky>
+        <a-sky id="model4-room8" radius="10" src="#model4-img8" visible="false"></a-sky>
+        <a-entity camera look-controls wasd-controls>
+        </a-entity>
+    </a-scene>
+    </div>
+    
+<script></script>
+  
+</body>
+</html>
+
+

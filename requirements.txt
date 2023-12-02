@@ -1,0 +1,16 @@
+asgiref==3.7.2
+dj-database-url==2.1.0
+Django>=3.0
+django-appconf>=1.0.6
+django-compressor==4.4
+djangorestframework==3.14.0
+package-name==0.1
+packaging==23.2
+psycopg2==2.9.9
+pytz==2023.3.post1
+rjsmin==1.2.1
+sqlparse==0.4.4
+tzdata==2023.3
+waitress==2.1.2
+whitenoise==6.*
+gunicorn==21.2.0

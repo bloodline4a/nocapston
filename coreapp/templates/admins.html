@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>TRI-LC</title>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
+	<link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
+	<link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
+	<link rel="icon" type="image/x-icon" href="{% static 'coreapp/images/Ellipse2-1.png' %}">
+</head>
+<body style="background-color: white !important;">
+	<div class="navbar">
+		<div class="row">	
+			<div class="column column-30" id="navc">
+				<div class="user-section">
+					<a href="#" onclick="confirmLogout()">
+					<img src="{% static 'coreapp/images/Ellipse1.png' %}" alt="profile photo" class="circle float-left profile-photo" width="60" height="auto">
+						<div class="username">
+							<h4>Mhe Ann</h4>
+							<p>Administrator</p>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div id="sidebar" class="column">
+			<img src="{% static 'coreapp/images/Ellipse%2-1.png' %}" alt=""> 
+			<ul class="inline-list">
+				<li><a href="{% url 'ad_hom' %}"><img src="{% static 'coreapp/images/image6.png' %}" alt="" class="sideimg"> Dashboard</a></li>
+				<li><a href="{% url 'req' %}"><img src="{% static 'coreapp/images/image7.png' %}" alt="" class="sideimg"> Request</a></li>
+				<li><a href="{% url 'prop' %}"><img src="{% static 'coreapp/images/image8.png' %}" alt="" class="sideimg"></i> Property</a></li>
+				<li><a href="{% url 'ad_tent' %}"><img src="{% static 'coreapp/images/image9.png' %}" alt="" class="sideimg"></i> Tenant</a></li>
+				<li><a href="{% url 'comp' %}"><img src="{% static 'coreapp/images/image22.png' %}" alt="" class="sideimg"> Inquiries</a></li>
+				<li><a href="{% url 'rep' %}"><img src="{% static 'coreapp/images/image19.png' %}" alt="" class="sideimg"></i> Reports</a></li>
+			</ul>
+		</div>
+		<section id="main-content" class="column column-offset-20">
+			{% block content %}
+			{% endblock %}
+		</section>
+	</div>	
+</body>
+<script>
+	function confirmLogout() {
+    var logoutConfirmed = confirm("Are you sure you want to log out?");
+    if (logoutConfirmed) {
+        window.location.href = "{% url 'logout' %}";
+    }
+}
+</script>
+</html> 
+   

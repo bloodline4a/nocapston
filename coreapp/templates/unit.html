@@ -1,0 +1,28 @@
+{% extends "admins.html" %}
+{% load static %}
+
+    {% block content %}
+    <div class="tntcon">
+        <div class="tntlist">All Property <span>Sort by <i class="fa fa-caret-down" aria-hidden="true"></i></span></div>
+        <hr>
+        <table class="tnt">
+            <div class="action-button">
+                <a href="{% url 'creacc' %}" class="add-button">
+                    <img src="{% static 'coreapp/images/add-to-queue1.png' %}" alt="" class= "adtimg"> Add Account
+                </a>
+            </div>
+            <tr>
+                <th><div class="rounded-content">Name</div></th>
+                <th>Contact</th>   
+                <th>Unit Type</th>
+            </tr>
+            {% for item in Tenants %}
+            <tr>
+                <td><div class="rounded-content">{{ item.tent_name }}</div></td>
+                <td>{{ item.tent_pnum }}</td>   
+                <td><div class="rounded-content">{{ item.unit_type }}</div></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

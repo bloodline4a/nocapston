@@ -1,0 +1,23 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="description">
+    <title>TRI-LC</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
+</head>
+<div class="lnav">   
+    <a>TRI-LC ENTERPRISES</a>
+    <a href="{% url 'home' %}">LOGIN</a>
+    <a href="{% url 'contact' %}">CONTACTS</a>
+    <a href="{% url 'amnts' %}">AMENITIES</a>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'coreapp/images/Ellipse2-1.png' %}">
+    <title>TRI-LC</title>
+</head>
+<body class="tntbod">
+  <div class="navbar">
+		<div class="row">	
+			<div class="column column-30" id="navc">
+				<div class="user-section">
+					<a href="#" onclick="confirmLogout()">
+            <img src="{% static 'coreapp/images/prof.png' %}" alt="profile photo" class="circle float-left profile-photo" width="60" height="auto">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+  <div  class="row" id="thome">
+    <div class="col" id="thcol">
+      <div class="tentu">
+        <div class="prof">
+          <img src="{% static 'coreapp/images/prof.png' %}" alt="" class="user">
+          <h4>{{ username }}</h4>
+        </div>        
+        <ul class ="tntli">
+          <li><span><img src="{% static 'coreapp/images/image20.png' %}" alt="" class="tntimg"></span><a href="{% url 'pay' username=username %}">PAYMENTS</a></li>
+          <li><span><img src="{% static 'coreapp/images/isyu.png' %}" alt="" class="tntimg"></span><a href="{% url 'tnt_hom' %}?username={{ username }}"> ISSUES</a></li>
+        </ul>
+      </div>   
+    </div>
+    <div class="col" id="thcol">
+        <h4 class="pend">PENDING PAYMENTS</h4>
+        <div class="large-card" id="payContent">
+            {% for payment in paypend %}
+                <div class="totmount">
+                    <div><strong>Date: </strong> {{ payment.date }}</div>
+                    <div class="total-amount"><strong class="tot">Total</strong> 
+                        <br>
+                        {{ payment.amount }}
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <strong>Mode of Payment:</strong> {{ payment.mop }}
+                </div>
+                <hr>
+                <div>
+                    <strong>Reference Number:</strong> {{ payment.ref }}
+                </div>
+    
+                
+            {% endfor %}
+        </div>
+        <h4 class="sucfl" style="color: #301B09;">SUCCESSFUL PAYMENTS</h4>
+        <div class="large-card" id="successPayContent">
+            {% for payment in paypsucc %}
+            <div>
+                <strong>Date: </strong> {{ payment.date }}
+            </div>
+            <hr>
+            <div>
+                <strong>Mode of Payment:</strong> {{ payment.mop }}
+            </div>
+            <hr>
+            <div>
+                <strong>Reference Number:</strong> {{ payment.ref }}
+            </div>
+            <hr>
+            <div>
+                <strong>Total Amount:</strong> {{ payment.amount }}
+            </div>
+            {% endfor %}
+        </div>        
+    </div>
+  </div>
+  
+  
+  <script>
+    const issuesLink = document.querySelector('.tntli li:nth-child(2) a');
+        const headerText = document.getElementById('headerText');
+        const payContent = document.getElementById('payContent');
+        const successfulPaymentSection = document.getElementById('successPayContent');
+        issuesLink.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            // Change the text of the 2nd column header
+            headerText.innerHTML =
+            `
+              <div class="comptel">COMPLAINTS</div>
+              <div class="compsub">Please tell us what it is, and we’ll address the issue.</div>
+              <hr class="chr">
+            `;
+            // Replace the content of the 2nd column
+            payContent.innerHTML = `         
+            <div class="latest-message">
+                {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
+            </div>
+
+
+            <form method="POST" action="{% url 'tnt_hom' %}">
+              {% csrf_token %}
+              <div class="form__group field">
+
+                  <input type="input" class="form__field" name="name" value="{{ username }}" readonly>
+                  <label for="" class="form__label">Name</label>
+              </div>
+              <div class="form__group field">
+                  <input type="input" class="form__field" name="issue" required>
+                  <label for="" class="form__label">Tell us about your issue</label>
+              </div>
+              <div class="form__group field">
+                  <input type="input" class="form__field" name="solution" required>
+                  <label for="" class="form__label">How can we make things right?</label>
+              </div>
+              
+              <button type="submit" class="comps">Submit</button>
+          </form>
+
+        
+            `;
+            // Remove the SUCCESSFUL PAYMENT section
+            const successfulPaymentSection = document.getElementById('colpay');
+            successfulPaymentSection.style.display = 'none';
+        });
+
+        
+
+        window.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const issuesParam = urlParams.get('issues');
+        const usernameParam = urlParams.get('username');
+
+        if (issuesParam === 'true' && usernameParam) {
+                // Activate the ISSUES functionality here
+        const headerText = document.getElementById('headerText');
+        const payContent = document.getElementById('payContent');
+
+        headerText.innerHTML =
+            `
+              <div class="comptel">COMPLAINTS</div>
+              <div class="compsub">Please tell us what it is, and we’ll address the issue.</div>
+              <hr class="chr">
+            `;
+
+        payContent.innerHTML = `
+            <div class="latest-message">
+                {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
+            </div>
+
+            <form method="POST" action="{% url 'tnt_hom' %}">
+              {% csrf_token %}
+              <input type="hidden" name="username" value="{{ username }}">
+              <div class="form__group field">
+                  <input type="input" class="form__field" name="name" value="{{ username }}" readonly>
+                  <label for="" class="form__label">Name</label>
+              </div>
+              <div class="form__group field">
+                  <input type="input" class="form__field" name="issue" required>
+                  <label for="" class="form__label">Tell us about your issue</label>
+              </div>
+              <div class="form__group field">
+                  <input type="input" class="form__field" name="solution" required>
+                  <label for="" class="form__label">How can we make things right?</label>
+              </div>
+              
+              <button type="submit" class="comps">Submit</button>
+            </form>
+        `;
+
+        const successfulPaymentSection = document.getElementById('colpay');
+        successfulPaymentSection.style.display = 'none';
+    }
+});
+
+
+
+          function confirmLogout() {
+            var logoutConfirmed = confirm("Are you sure you want to log out?");
+            if (logoutConfirmed) {
+                window.location.href = "{% url 'logout' %}";
+            }
+        }
+
+</script>
+</body>
+</html>
