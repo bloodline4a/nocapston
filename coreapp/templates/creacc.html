@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'coreapp/images/Ellipse2-1.png' %}">
+    <title>TRI-LC</title>
+</head>
+<body style="overflow: hidden;">
+  <section id="main-contentc" class="columnd">
+    <div class="row" id="cfor">
+      <div class="col-md-auto">
+        <img src="{% static 'coreapp/images/ACCOUNT.png' %}" alt="" class="crs" >
+      </div>
+      <div id="rowc" class="col text-center">
+        <h1 class="mt-5">Create Account</h1>
+          <div class="latest-message">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if forloop.last %}
+                        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+          </div>
+        <form method="POST" action="{% url 'creacc' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Full Name" id="" name= "{{ form.tent_name.name }}">
+          </div>
+          
+          <div class="mb-3">
+            <input type="text" class="form-control" id="" placeholder="Username" name= "{{ form.tent_uname.name }}">
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="{{ form.tent_pword.name }}">
+          </div>
+          <div class="mb-3">
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" name="{{ form.tent_emel.name }}">
+          </div>
+          <div class="mb-3">
+            <input type="tel" class="form-control" id="" placeholder="Phone Number" name="{{ form.tent_pnum.name }}">
+          </div>
+          <div class="form-group">
+            <select name="{{ form.unit_type.name }}" id="{{ form.unit_type.id_for_label }}" class="form-control">
+                {% for unit in form.unit_type.field.queryset %}
+                    {% if unit.unt_availability %}
+                        <option value="{{ unit.id }}"> {{ unit.unit_blt }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+          </div>      
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>  
+  </section>
+</body>
+</html>

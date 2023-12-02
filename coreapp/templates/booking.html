@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
+	<link rel="icon" type="image/x-icon" href="{% static 'coreapp/images/Ellipse2-1.png' %}">
+	<title>TRILC</title>
+</head>
+<body>	
+	<div class="row">
+        <div id="rowd" class="columnd">
+            <h1 class="mt-6">your new place to stay</h1>
+            <div class="formh" id="formbook">
+				{% if form.errors %}
+				<div class="form__errors">
+					{% for field, errors in form.errors.items %}
+					{% for error in errors %}
+						<p class="error">{{ error }}</p>
+					{% endfor %}
+					{% endfor %}
+				</div>
+				{% endif %}
+				<form method="POST" action="{% url 'book' %}">
+					{% csrf_token %}
+				  <div class="mb-2">
+					<input type="text" placeholder="Name" class="form-control" id="" name= "{{ form.name.name }}" required>
+				  </div>
+                <div class="mb-2">
+                  <input type="email" placeholder="Email" class="form-control" id="" name= "{{ form.emel.name }}" required>
+                </div>	
+				<div class="mb-2">
+					<input type="tel" placeholder="Phone Number" class="form-control" id="" name= "{{ form.pnum.name }}" required>
+				</div>
+				<div class="mb-2">
+					<input type="file" id="img" name= "{{ form.image.name }}" accept="image/*" required>
+				</div>
+				<div class="mb-2">
+					<select class="form-select" id="inputGroupSelect01" name= "{{ form.unit.name }}" required value>
+					  <option value="" {% if form.unit.value is None %}selected{% endif %}>Model</option>
+					  <option value="Model 1" {% if form.unit.value == 'Model 1' %}selected{% endif %}>Model 1</option>
+					  <option value="Model 2" {% if form.unit.value == 'Model 2' %}selected{% endif %}>Model 2</option>
+					  <option value="Model 3" {% if form.unit.value == 'Model 3' %}selected{% endif %}>Model 3</option>
+					  <option value="Model 4" {% if form.unit.value == 'Model 4' %}selected{% endif %}>Model 4</option>
+					</select>
+				</div>
+				<div class="mb-2">
+					<select class="form-select" id="inputGroupSelect01" name= "{{ form.bookt.name }}" required>
+					  <option value="" {% if form.bookt.value is None %}selected{% endif %}>Book Duration</option>
+					  <option value="6 Months" {% if form.bookt.value == '6 Months' %}selected{% endif %}>6 Months</option>
+					  <option value="Short-Term" {% if form.bookt.value == 'Short-Term' %}selected{% endif %}>Short-Term</option>
+					</select>
+				</div>    
+				<div class="mb-2">
+				<input type="date" placeholder="Choose Date" class="form-control" id="" name= "{{ form.date.name }}" required>
+				</div>
+                <button type="submit" class="boksub">SUBMIT</button>
+			</form>
+			{% if messages %}
+				<ul class="messages">
+					{% for message in messages %}
+						<li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="background-color: #4CAF50; color: white;">
+							{{ message }}
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}		
+            </div>
+        </div>
+        <div class="columnd" id="lhs">
+          <div class="hnav">
+            <a href="{% url 'homepage' %}">HOME</a>
+            <a href="{% url 'contact' %}">CONTACTS</a>
+          </div>     
+        </div>  
+      </div>  
+</body>
+</html>
+
+

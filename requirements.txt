@@ -6,6 +6,7 @@ django-compressor==4.4
 djangorestframework==3.14.0
 package-name==0.1
 packaging==23.2
+Pillow>=8.0.0,<9.0.0
 psycopg2==2.9.9
 pytz==2023.3.post1
 rjsmin==1.2.1

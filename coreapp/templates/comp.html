@@ -1,0 +1,203 @@
+{% extends "admins.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'coreapp/images/Ellipse2-1.png' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>TRILC</title>
+</head>
+<body>
+{% block content %}
+<style>
+    .table-container {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        width: 90%;
+        align-self: center;
+    }
+
+    .table-wrapper {
+        width: 48%; /* Adjust as needed */
+    }
+
+    .table-container table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .table-container th, .table-container td {
+        text-align: center;  
+        padding: 8px;
+    }
+
+    table tr, td{
+        border: none;
+    }
+    .table-container th {
+        background-color: #95c967;
+    }
+
+    .table-container tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>
+
+<div class="tntcon">
+    <div class="tntlist">All Inqueries <span><i class="fa fa-caret-down" aria-hidden="true"></i></span></div>
+    <hr>
+    <div class="table-container">
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>MOP</th>
+                    <th>Reference</th>
+                    <th>Action</th>
+                </tr>
+                {% for item in pay %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.amount }}</td>
+                        <td>{{ item.mop }}</td>
+                        <td>{{ item.ref }}</td>
+                        <td><button class="btnmodal" id="myBtn" data-id="{{ item.id }}" data-name="{{ item.name }}" data-amount="{{ item.amount }}" data-mop="{{ item.mop }}" data-ref="{{ item.ref }}">View</button></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Complaint</th>
+                    <th>Solution</th>
+                    <th>Action</th>
+
+                </tr>
+                {% for item in comp %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.issue }}</td>
+                        <td>{{ item.solution }}</td>
+                        <td><button class="delete-button" data-comp-id="{{ item.id }}">Delete</button></td>
+
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div id="myModal" class="modal">
+        <form action="{% url 'comp' %}" method="POST">
+        {% csrf_token %}    
+        <div class="modal-content2">
+            <div class="close">&times;</div>
+            <div class="modal-row2" id="mdt">
+                <input type="hidden" id="emel" name="emel" value="">
+                <input type="hidden" id="custom_id" name="custom_id" value="some_value">
+                <div class="label">Name:</div>
+                <div class="value" id="name"></div>
+            </div>
+            <hr>
+            <div class="modal-row2">
+                <div class="label">Amount:</div>
+                <div class="value" id="amount"></div>
+            </div>
+            <hr>
+            <div class="modal-row2">
+                <div class="label">Reference Number:</div>
+                <div class="value" id="ref"></div>
+            </div>
+            <hr>
+            <div class="modal-row2">
+                <div class="label">MOP:</div>
+                <div class="value" id="mop"></div>
+            </div>
+            <hr>
+            <div class="modal-row2">
+                <button type="submit" name="action" value="decline">DECLINE</button>
+                <button type="submit" name="action" value="approve">APPROVE</button>
+            </div>
+                 
+        </form>
+        </div>
+    </div>
+</div>
+<script>
+    var modal = document.getElementById("myModal");
+    var modalContent = document.querySelector(".modal-content");
+    var btns = document.querySelectorAll(".btnmodal");
+    var span = document.getElementsByClassName("close")[0];
+
+    // Attach click event to all buttons with class .btnmodal
+    btns.forEach(function(btn) {
+        btn.onclick = function() {
+            var name = this.getAttribute("data-name");
+            var amount = this.getAttribute("data-amount");
+            var ref = this.getAttribute("data-ref");
+            var mop = this.getAttribute("data-mop");
+            var id = this.getAttribute("data-id");
+
+            // Set modal content using the data attributes
+            document.getElementById("name").innerHTML = name;
+            document.getElementById("amount").innerHTML = amount;
+            document.getElementById("mop").innerHTML = mop;
+            document.getElementById("ref").innerHTML = ref;
+            document.getElementById("custom_id").value = id;
+            document.getElementById("emel").value = emel; // Set the value of the hidden input for emel
+            modal.style.display = "block";
+        };
+    });
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    document.querySelectorAll('.delete-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+        var compId = this.getAttribute('data-comp-id');  // Get the tenant ID from data-tent-id attribute
+        // Rest of your code..
+        if (confirm('Are you sure this issue is solved?')) {
+            fetch(`/comp_solv/${compId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.parentElement.parentElement.remove();  // Remove the entire row
+                    alert('Complaint Solved.');
+                } else {
+                    alert('Failed to delete the complaint.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
+
+</body>
+</html>

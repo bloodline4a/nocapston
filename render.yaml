@@ -1,0 +1,20 @@
+databases:
+  - name: trilc
+    databaseName: trilc
+    user: trilc_user
+
+services:
+  - type: web
+    name: trilc
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn corepro.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: trilc
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4

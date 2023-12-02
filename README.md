@@ -1,1 +1,1 @@
-# nocapston
+type nul > README.md  # for Windows

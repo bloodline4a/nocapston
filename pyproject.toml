@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "corepro"
+version = "0.1.0"
+description = ""
+authors = ["riritu <robertofaner55@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.2"
+asgiref = "3.7.2"
+dj-database-url = "2.1.0"
+django = "4.2.1"
+django-appconf = ">=1.0.6"
+django-compressor = "4.4"
+djangorestframework = "3.14.0"
+packaging = "23.2"
+psycopg2-binary = "^2.9.9"
+pytz = "2023.3.post1"
+rjsmin = "1.2.1"
+sqlparse = "0.4.4"
+tzdata = "2023.3"
+waitress = "2.1.2"
+whitenoise = "==6.*"
+gunicorn = "21.2.0"
+brotli = "^1.1.0"
+pillow = "^10.1.0"
+
+[tool.poetry.group.dev.dependencies]
+whitenoise = "^6.6.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
