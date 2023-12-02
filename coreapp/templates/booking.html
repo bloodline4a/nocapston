@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'coreapp/css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
     <link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
     <link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
@@ -38,6 +38,9 @@
 					<input type="tel" placeholder="Phone Number" class="form-control" id="" name= "{{ form.pnum.name }}" required>
 				</div>
 				<div class="mb-2">
+					<input type="file" id="img" name= "{{ form.image.name }}" accept="image/*" required>
+				</div>
+				<div class="mb-2">
 					<select class="form-select" id="inputGroupSelect01" name= "{{ form.unit.name }}" required value>
 					  <option value="" {% if form.unit.value is None %}selected{% endif %}>Model</option>
 					  <option value="Model 1" {% if form.unit.value == 'Model 1' %}selected{% endif %}>Model 1</option>
@@ -52,21 +55,21 @@
 					  <option value="6 Months" {% if form.bookt.value == '6 Months' %}selected{% endif %}>6 Months</option>
 					  <option value="Short-Term" {% if form.bookt.value == 'Short-Term' %}selected{% endif %}>Short-Term</option>
 					</select>
-				  </div>    
-				<div class="mb-4">
+				</div>    
+				<div class="mb-2">
 				<input type="date" placeholder="Choose Date" class="form-control" id="" name= "{{ form.date.name }}" required>
 				</div>
                 <button type="submit" class="boksub">SUBMIT</button>
 			</form>
-			<div class="latest-message">.
-				{% if messages %}
+			{% if messages %}
+				<ul class="messages">
 					{% for message in messages %}
-						{% if forloop.last %}
-							<p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
-						{% endif %}
+						<li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="background-color: #4CAF50; color: white;">
+							{{ message }}
+						</li>
 					{% endfor %}
-				{% endif %}
-			  </div>		
+				</ul>
+			{% endif %}		
             </div>
         </div>
         <div class="columnd" id="lhs">

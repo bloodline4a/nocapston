@@ -39,7 +39,7 @@
       </div>   
     </div>
     <div class="col" id="thcol">
-        <h4 class="pend">PENDING PAYMENTS</h4>
+        <h4 class="pend" id="headerText">PENDING PAYMENTS</h4>
         <div class="large-card" id="payContent">
             {% for payment in paypend %}
                 <div class="totmount">
@@ -61,8 +61,9 @@
                 
             {% endfor %}
         </div>
-        <h4 class="sucfl" style="color: #301B09;">SUCCESSFUL PAYMENTS</h4>
-        <div class="large-card" id="successPayContent">
+        <div id="colpay">
+            <h4 class="sucfl" style="color: #301B09;">SUCCESSFUL PAYMENTS</h4>
+            <div class="large-card" id="successPayContent">
             {% for payment in paypsucc %}
             <div>
                 <strong>Date: </strong> {{ payment.date }}
@@ -81,6 +82,8 @@
             </div>
             {% endfor %}
         </div>        
+        </div>
+        
     </div>
   </div>
   
@@ -89,7 +92,6 @@
     const issuesLink = document.querySelector('.tntli li:nth-child(2) a');
         const headerText = document.getElementById('headerText');
         const payContent = document.getElementById('payContent');
-        const successfulPaymentSection = document.getElementById('successPayContent');
         issuesLink.addEventListener('click', function(event) {
             event.preventDefault();
 
