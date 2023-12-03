@@ -38,9 +38,6 @@
 					<input type="tel" placeholder="Phone Number" class="form-control" id="" name= "{{ form.pnum.name }}" required>
 				</div>
 				<div class="mb-2">
-					<input type="file" id="img" name= "{{ form.image.name }}" accept="image/*" required>
-				</div>
-				<div class="mb-2">
 					<select class="form-select" id="inputGroupSelect01" name= "{{ form.unit.name }}" required value>
 					  <option value="" {% if form.unit.value is None %}selected{% endif %}>Model</option>
 					  <option value="Model 1" {% if form.unit.value == 'Model 1' %}selected{% endif %}>Model 1</option>

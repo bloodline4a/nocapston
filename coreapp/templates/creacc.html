@@ -32,26 +32,26 @@
         <form method="POST" action="{% url 'creacc' %}">
           {% csrf_token %}
           <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Full Name" id="" name= "{{ form.tent_name.name }}">
+            <input type="text" class="form-control" placeholder="Full Name" id="" name= "{{ form.tent_name.name }}" required>
           </div>
           
           <div class="mb-3">
-            <input type="text" class="form-control" id="" placeholder="Username" name= "{{ form.tent_uname.name }}">
+            <input type="text" class="form-control" id="" placeholder="Username" name= "{{ form.tent_uname.name }}" required>
           </div>
           <div class="mb-3">
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="{{ form.tent_pword.name }}">
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="{{ form.tent_pword.name }}" required>
           </div>
           <div class="mb-3">
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" name="{{ form.tent_emel.name }}">
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" name="{{ form.tent_emel.name }}" required>
           </div>
           <div class="mb-3">
-            <input type="tel" class="form-control" id="" placeholder="Phone Number" name="{{ form.tent_pnum.name }}">
+            <input type="tel" class="form-control" id="" placeholder="Phone Number" name="{{ form.tent_pnum.name }}" required>
           </div>
           <div class="form-group">
-            <select name="{{ form.unit_type.name }}" id="{{ form.unit_type.id_for_label }}" class="form-control">
+            <select name="{{ form.unit_type.name }}" id="{{ form.unit_type.id_for_label }}" class="form-control" required>
                 {% for unit in form.unit_type.field.queryset %}
                     {% if unit.unt_availability %}
-                        <option value="{{ unit.id }}"> {{ unit.unit_blt }}</option>
+                        <option value="{{ unit.id }}"> {{ unit.id }} - {{ unit.unit_blt }}</option>
                     {% endif %}
                 {% endfor %}
             </select>

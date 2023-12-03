@@ -36,7 +36,12 @@ class Tenantform(forms.ModelForm):
 class Requestform(forms.ModelForm):
     class Meta:
         model = Booked
-        fields = ['name', 'unit', 'pnum', 'date', 'emel', 'image', 'bookt']
+        fields = ['name', 'unit', 'pnum', 'date', 'emel', 'bookt']
+        
+class Payform(forms.ModelForm):
+    class Meta:
+        model = Booked
+        fields = ['ref', 'image', 'mop']
 
 class Paymentform(forms.ModelForm):
     class Meta:

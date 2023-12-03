@@ -20,6 +20,8 @@ urlpatterns = [
     path('prop/', views.prop, name='prop'),
     path('rep/', views.rep, name='rep'),
     path('foot/', views.foot, name='foot'),
+    path('bookpay/', views.bookpay, name='bookpay'),
+
     path('pay/<str:username>/', views.pay, name='pay'),
     path('delete-tent/<int:tenant_id>/', views.delete_tent, name='delete-tent'),
     path('delete-unit/<int:unit_id>/', views.delete_unit, name='delete_unit'),

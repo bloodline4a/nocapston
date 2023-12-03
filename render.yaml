@@ -1,18 +1,18 @@
 databases:
-  - name: nocapston
-    databaseName: nocapston
-    user: nocapston_user
+  - name: trilc
+    databaseName: trilc
+    user: trilc_user
 
 services:
   - type: web
-    name: nocapston
+    name: trilc
     runtime: python
     buildCommand: "./build.sh"
     startCommand: "gunicorn corepro.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: nocapston
+          name: trilc
           property: connectionString
       - key: SECRET_KEY
         generateValue: true

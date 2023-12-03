@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'coreapp/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'coreapp/css/milligram.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'coreapp/css/styles.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'coreapp/images/Ellipse2-1.png' %}">
+	<title>TRI-LC</title>
+</head>
+<body style="background-color: white;">	
+	<div class="row">
+        <div id="rowd" class="columnd">
+            <h1 class="mt-6">PAYMENT</h1>
+            <div class="formp" id="formbook">
+                <form method="post" action="{% url 'bookpay' %}" id="fom" enctype="multipart/form-data">
+                {% csrf_token %}	  
+                <div class="latest-message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if forloop.last %}
+                                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                  </div>	
+                <div class="bokp" id="inpo">
+                    <select class="form-select" id="inputGroupSelect01" name="mop" required>
+                        <option value="" {% if form.mop.value is None %}selected{% endif %}>Mode of Payment</option>
+                        <option value="Gcash" {% if form.mop.value == 'Gcash' %}selected{% endif %}>Gcash</option>
+                        <option value="Bank Transfer" {% if form.mop.value == 'Bank Transfer' %}selected{% endif %}>Bank Transfer</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <input type="text" placeholder="Reference Number" name="ref" required>
+                </div>
+                <div id="refb">
+                    <input type="file" id="img" name="image" accept="image/*" required>
+                </div>
+                <button type="submit" class="boksub">SUBMIT</button>                
+			</form>
+            </div>
+        </div>
+        <div class="columnd" id="lhs">
+        </div>  
+      </div>  
+</body>
+</html>
+
+

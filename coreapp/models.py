@@ -50,8 +50,10 @@ class Booked(models.Model):
     unit = models.CharField(max_length=255)
     pnum = models.CharField(max_length=20)  
     date = models.DateField(max_length=255)
+    emel = models.CharField(max_length=255, validators=[EmailValidator()], default='custom@example.com')  
     image = models.ImageField(upload_to='images/',default='image')
-    emel = models.CharField(max_length=255, validators=[EmailValidator()], default='custom@example.com')    
+    ref = models.IntegerField(default=1)
+    mop = models.CharField(max_length=255, default='CASH')  
     approval_status = models.CharField(max_length=20, choices=APPROVAL_CHOICES, default='Pending')
 
 class Payment(models.Model):

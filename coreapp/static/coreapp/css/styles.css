@@ -1288,10 +1288,34 @@ hr {
   justify-content: end;
 }
 
+.column {
+  width: 100%; /* Set the width of the column */
+}
+
+.column-page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Adjust as needed */
+  padding: 10px; /* Add padding as needed */
+  background-color: #F2F2F2;
+  border-radius: 2%;
+  border: 2px solid #266A06;
+}
+
+#dash {
+  width: 70%; /* Set the width of the large-card relative to the column */
+}
 
 .dtext {
-  margin-left: 20px; /* Adjust the margin as needed */
+  margin-left: 20px;
 }
+
+/* Responsive Font Size */
+.dtopt {
+  font-size: 1.2em; /* Adjust as needed */
+}
+
+
 
 .modal-content2 {
   width: 27% !important;
@@ -1445,6 +1469,15 @@ hr {
   width: 70% !important;
 }
 
+.bokp {
+  margin-top: 20%;
+  margin-bottom: 3%;
+}
+
+#img {
+  width: 63% !important;
+}
+
 .compsub {
   font-weight: light;
   font-size: large;
@@ -1517,7 +1550,7 @@ hr {
 
 
 .dtopt {
-  font-size: 38px;
+  font-size: 2em;
   color: #266A06;
   font-weight: bold;
 }
@@ -1715,6 +1748,11 @@ hr {
 .total-amount {
   font-size: 2rem;
   margin-right: 5%;
+}
+
+
+#refb {
+  margin-bottom: 16% !important;
 }
 @media (max-width: 640px) {
 
