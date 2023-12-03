@@ -21,7 +21,7 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
 
-locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+locale.setlocale(locale.LC_MONETARY, 'en_US.UTF-8')
 
 def index(request):
     return render(request, 'render/index.html', {})
