@@ -3,7 +3,7 @@ from django.shortcuts import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import Paymentform, Propform, Requestform, Tenantform,Compform
+from .forms import Paymentform, Propform, Requestform, Tenantform, Compform, Payform
 from django.views.decorators.csrf import csrf_protect
 from .models import Tenants, Booked, Payment, Units, Issues, Admin
 from django.core.mail import send_mail
@@ -20,6 +20,7 @@ from django.http import JsonResponse
 import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
+from django.shortcuts import render, get_object_or_404
 
 def index(request):
     return render(request, 'render/index.html', {})
@@ -213,37 +214,8 @@ def vtour(request):
 def amnts(request):  
     return render(request, 'amnts.html')
 
-def book(request):  
-    if request.method == 'POST':
-        form = Requestform(request.POST)
-        if form.is_valid():
-            nem = form.cleaned_data['name']
-            emel= form.cleaned_data['emel']
-            unit = form.cleaned_data['unit']
-            pnum = form.cleaned_data['pnum']
-            date = form.cleaned_data['date']
-            bookt = form.cleaned_data['bookt']
-            image = form.cleaned_data['image']
-            try:
-                book = Booked.objects.create(
-                    name = nem,
-                    emel = emel,
-                    unit= unit,
-                    pnum = pnum,
-                    date = date,
-                    bookt = bookt,
-                    image = image
-                )
-                messages.success(request,'''Booking Submitted
-                Thank you for submitting your booking. 
-                                 Please wait for confirmation. ''')
-            except IntegrityError:
-                messages.error(request, "Invalid Input.")
-    else:
-        form = Requestform()
-    return render(request, 'booking.html', {'form': form})
 
-def comp(request):  
+def comp(request):
     comp = Issues.objects.all()
     payment = Payment.objects.filter(status='Pending').order_by('date')
     context = {
@@ -266,10 +238,10 @@ def comp(request):
 
             messages.error(request, "Invalid Input.")
 
-    return render(request, 'comp.html' ,{ **context })
+    return render(request, 'comp.html', {**context})
 
 
-def req(request):  
+def req(request):
     book = Booked.objects.filter(approval_status='Pending').order_by('date')
     reqy = {
         'Booked': book
@@ -285,7 +257,7 @@ def req(request):
 
             subject = 'Booking Approved'
             message = ''' Your Booking is Approved
-                        
+
                         To complete your payment, please use the following details:
 
                         Payment Method: Bank Transfer
@@ -300,7 +272,10 @@ def req(request):
 
                         Please ensure to include the unique transaction reference [XYZ123] when making the payment.
 
+                        To view or manage your booking, click [here](https://tri-lc-enterprises.onrender.com/bookpay/).
+
                         Thank you for choosing our services!
+
                       '''
             from_email = 'renafjunior@gmail.com'
             recipient_list = [emel]
@@ -319,11 +294,10 @@ def req(request):
 
             messages.error(request, "Invalid Input.")
 
-        
     return render(request, 'ad_req.html', reqy)
 
 
-def nav(request):  
+def nav(request):
     return render(request, 'navbar.html')
 
 
@@ -335,7 +309,7 @@ def pay(request, username):
         return redirect('book')
 
     context = {'username': username, 'tenant_id': tenant.id}
-    
+
     if request.method == 'POST':
         form = Paymentform(request.POST)
         if form.is_valid():
@@ -354,8 +328,8 @@ def pay(request, username):
                     ref=ref,
                     mop=mop,
                     amount=amount,
-                    tenant=tenant_id  
-                                                    )
+                    tenant=tenant_id
+                )
                 messages.success(request, "Payment Submitted.")
 
             except IntegrityError:
@@ -367,22 +341,23 @@ def pay(request, username):
 
     return render(request, 'payment.html', {'form': form, **context})
 
-def prop(request):  
+
+def prop(request):
     queryset = Units.objects.all()
     context = {
         'Units': queryset
     }
-    if request.method == 'POST':       
-        form = Propform(request.POST)       
+    if request.method == 'POST':
+        form = Propform(request.POST)
         if form.is_valid():
             untp = form.cleaned_data['unit_type']
-            blt = form.cleaned_data['unit_blt'] 
+            blt = form.cleaned_data['unit_blt']
             prc = form.cleaned_data['unt_price']
 
             try:
                 units = Units.objects.create(
                     unit_type=untp,
-                    unit_blt=blt,  
+                    unit_blt=blt,
                     unt_price=prc
                 )
                 messages.success(request, "Unit Created.")
@@ -396,7 +371,8 @@ def prop(request):
 
     return render(request, 'property.html', {'form': form, **context})
 
-def rep(request):  
+
+def rep(request):
     if request.method == 'GET':
         try:
             start_year = int(request.GET.get('start_year', datetime.now().year))
@@ -412,7 +388,8 @@ def rep(request):
                 end_date = datetime(end_year, end_month, last_day_end).date()
 
                 # Query the Payment model to get the total amount for the selected range of months
-                total_amount = Payment.objects.filter(date__range=(start_date, end_date)).aggregate(Sum('amount'))['amount__sum']
+                total_amount = Payment.objects.filter(date__range=(start_date, end_date)).aggregate(Sum('amount'))[
+                    'amount__sum']
 
                 # Prepare data to pass to the template
                 report_period = f'{start_date.strftime("%B %Y")} - {end_date.strftime("%B %Y")}'
@@ -445,12 +422,14 @@ def rep(request):
         pass
 
 
-@login_required(login_url='home')  
-def admins(request):  
+@login_required(login_url='home')
+def admins(request):
     return render(request, 'admins.html')
 
-@login_required(login_url='home') 
+
+@login_required(login_url='home')
 def tnt_hom(request):
+    locale.setlocale(locale.LC_ALL, 'fil_PH.UTF-8')
     username = request.GET.get('username', '')
 
     try:
@@ -489,9 +468,71 @@ def tnt_hom(request):
 
     return render(request, 'tnt_hom.html', context)
 
-def foot(request):  
+
+def foot(request):
     return render(request, 'footer.html')
 
+
+def book(request):
+    if request.method == 'POST':
+        form = Requestform(request.POST)
+        if form.is_valid():
+            nem = form.cleaned_data['name']
+            emel = form.cleaned_data['emel']
+            unit = form.cleaned_data['unit']
+            pnum = form.cleaned_data['pnum']
+            date = form.cleaned_data['date']
+            bookt = form.cleaned_data['bookt']
+            try:
+                book = Booked.objects.create(
+                    name=nem,
+                    emel=emel,
+                    unit=unit,
+                    pnum=pnum,
+                    date=date,
+                    bookt=bookt,
+                )
+                request.session['booking_id'] = book.id
+                messages.success(request, '''Booking Submitted
+                Thank you for submitting your booking. 
+                                 Please wait for confirmation. ''')
+            except IntegrityError:
+                messages.error(request, "Invalid Input.")
+    else:
+        form = Requestform()
+    return render(request, 'booking.html', {'form': form})
+
+
+def bookpay(request):
+    booking_id = request.session.get('booking_id')
+    print(f"Booking ID from session: {booking_id}")
+    booking = get_object_or_404(Booked, id=booking_id) if booking_id else None
+
+    if request.method == 'POST':
+        form = Payform(request.POST, request.FILES)
+        if form.is_valid():
+            mop = form.cleaned_data['mop']
+            image = form.cleaned_data['image']
+            ref = form.cleaned_data['ref']
+            try:
+                if booking:
+                    booking.mop = mop
+                    booking.image = image
+                    booking.ref = ref
+                    booking.save()
+                    del request.session['booking_id']  # Remove the session variable after payment
+
+                    messages.success(request, '''Payment Submitted
+                    Thank you for your payment. 
+                    Your booking is now complete.''')
+                else:
+                    messages.error(request, "Invalid Booking ID.")
+            except IntegrityError:
+                messages.error(request, "Invalid Input.")
+    else:
+        form = Payform()
+
+    return render(request, 'bookpay.html', {'form': form})
 
 
 
