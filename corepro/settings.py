@@ -81,24 +81,18 @@ WSGI_APPLICATION = 'corepro.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-database_url = os.environ.get("DATABASE_URL")
-
-if database_url:
-    DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://nocapston_user:6ciZPDbNGonFIDVcbSS4x3MZsQHdLX35@dpg-cll7b0uaov6s73f346qg-a.oregon-postgres.render.com/nocapston',
-        conn_max_age=600    )}
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'admins',
-            'USER': 'postgres',
-            'PASSWORD': 'renaf',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'admins',
+        'USER': 'fonti',
+        'PASSWORD': 'renaf',
+        'HOST':  '127.0.0.1',
+        'PORT': '5432',
     }
+}
+database_url = os.environ.get("DATABASE_URL")
+DATABASES['default'] = dj_database_url.parse(database_url)
 
 
 
