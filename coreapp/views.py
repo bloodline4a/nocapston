@@ -453,7 +453,6 @@ def admins(request):
 
 @login_required(login_url='home') 
 def tnt_hom(request):
-    locale.setlocale(locale.LC_ALL, 'fil_PH.UTF-8')
     username = request.GET.get('username', '')
 
     try:
