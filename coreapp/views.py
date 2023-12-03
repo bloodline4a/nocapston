@@ -132,7 +132,6 @@ def creacc(request):
     return render(request, 'creacc.html', {'form': form})
 
 def ad_hom(request):  
-    locale.setlocale(locale.LC_ALL, 'en_us.UTF-8')
     book = Booked.objects.filter(approval_status='pending').order_by('date')
     tent = Tenants.objects.all().order_by('tent_name')
     prop = Units.objects.all()
