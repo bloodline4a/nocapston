@@ -140,11 +140,9 @@ def ad_hom(request):
     prop = Units.objects.all()
 
     total_profit = calculate_total_profit()
-    if total_profit is not None:
-        formatted_total_profit = locale.currency(total_profit, grouping=True)
-    else:
-        formatted_total_profit = '0'  # or any default value you want to set
 
+    formatted_total_profit = '{:.2f}'.format(total_profit) if total_profit is not None else '0.00'
+    
     num_tenants = tent.count()
     num_unit = prop.count()
 
