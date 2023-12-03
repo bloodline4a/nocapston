@@ -21,7 +21,18 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
 
-locale.getlocale()
+# Get the current locale setting for all categories (LC_ALL)
+current_locale_all = locale.getlocale()
+
+# Save the current locale settings
+current_locale_category, current_encoding = current_locale_all
+
+# Now, set the locale back to the original settings
+try:
+    locale.setlocale(locale.LC_ALL, current_locale_all)
+    print("Locale set back to the original settings.")
+except locale.Error as e:
+    print(f"Error setting locale: {e}")
 
 def index(request):
     return render(request, 'render/index.html', {})
