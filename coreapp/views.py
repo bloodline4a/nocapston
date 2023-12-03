@@ -258,6 +258,10 @@ def req(request):
             subject = 'Booking Approved'
             message = ''' Your Booking is Approved
 
+                        Please pay for your rental fee for the completion of rental
+                        short term : 1000.00 
+                        6-months: 45000.00
+
                         To complete your payment, please use the following details:
 
                         Payment Method: Bank Transfer
