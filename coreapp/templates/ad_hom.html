@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="column page-heading">
-                <div class="large-card" id="dash">
+                <div class="large-card" id="dash1">
                     <img src="{% static 'coreapp/images/image4.png' %}" alt="">
                     <div class="dtext">
                         {% if NumTenants %}
@@ -43,7 +43,7 @@
             </div>
             
             <div class="column page-heading">
-                <div class="large-card" id="dash">
+                <div class="large-card" id="dash2">
                     <img src="{% static 'coreapp/images/image5-1.png' %}" alt="">
                     <div class="dtext">
                         {% if total_profit %}
@@ -63,10 +63,10 @@
                 <h4 style="display: flex; justify-content: start;">Request</h4>
                 {% if Booked %}
                     {% for item in Booked|slice:":4" %}
-                        <div class="dashreq" id="">
-                            <div class="card" id="reqdash">
+                        <div class="dashreq" id="1">
+                            <div class="card" id="reqdash1">
                             </div>
-                            <div class="reqcards" id="dash">
+                            <div class="reqcards" id="dash3">
                                 <img src="{% static 'coreapp/images/image14-1.png' %}" alt="" class="reqimg">    
                                 <div class="dtext">
                                     <div class="colnem">{{ item.name }}</div>
@@ -84,10 +84,10 @@
                 <h4 style="display: flex; justify-content: start;">Property</h4>
                 {% if Prop %}
                     {% for item in Prop|slice:":4" %}
-                        <div class="dashreq" id="">
-                            <div class="card" id="reqdash">
+                        <div class="dashreq" id="2">
+                            <div class="card" id="reqdash2">
                             </div>
-                            <div class="reqcards" id="dash">
+                            <div class="reqcards" id="dash4">
                                 <img src="{% static 'coreapp/images/Rectangle27.png' %}" alt="" class="proimg">    
                                 <div class="dtext">
                                     <div class="colnem">{{ item.unit_blt }}</div>
@@ -108,7 +108,7 @@
                         <div class="dashreq" id="">
                             <div class="card" id="reqdash">
                             </div>
-                            <div class="reqcards" id="dash">
+                            <div class="reqcards" id="dash5">
                                 <img src="{% static 'coreapp/images/image14-1.png' %}" alt="" class="reqimg">    
                                 <div class="dtext">
                                     <div class="colnem">{{ item.tent_name }}</div>
