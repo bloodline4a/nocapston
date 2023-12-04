@@ -59,6 +59,7 @@
         <div class="table-wrapper">
             <table>
                 <tr>
+                    <th>Type</th>
                     <th>Name</th>
                     <th>Amount</th>
                     <th>MOP</th>
@@ -66,12 +67,24 @@
                     <th>Action</th>
                 </tr>
                 {% for item in pay %}
+                <tr>
+                    <td>Rental Payment</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item.mop }}</td>
+                    <td>{{ item.ref }}</td>
+                    <td><button class="btnmodal" id="myBtn" data-id="{{ item.id }}"  data-name="{{ item.name }}" data-amount="{{ item.amount }}" data-mop="{{ item.mop }}" data-ref="{{ item.ref }}">View</button></td>
+                </tr>
+                {% endfor %}
+
+                {% for item in bookpay %}
                     <tr>
+                        <td>Booking Payment</td>
                         <td>{{ item.name }}</td>
-                        <td>{{ item.amount }}</td>
+                        <td><img src="{{ item.image.url }}" alt="{{ item.name }}"></td>                           
                         <td>{{ item.mop }}</td>
                         <td>{{ item.ref }}</td>
-                        <td><button class="btnmodal" id="myBtn" data-id="{{ item.id }}" data-name="{{ item.name }}" data-amount="{{ item.amount }}" data-mop="{{ item.mop }}" data-ref="{{ item.ref }}">View</button></td>
+                        <td><button class="btnmodal" id="myBtn" data-id="{{ item.id }}" data-emel="{{ item.emel }}" data-name="{{ item.name }}" data-mop="{{ item.mop }}" data-ref="{{ item.ref }}">View</button></td>
                     </tr>
                 {% endfor %}
             </table>
@@ -97,6 +110,7 @@
                 {% endfor %}
             </table>
         </div>
+        
     </div>
     <div id="myModal" class="modal">
         <form action="{% url 'comp' %}" method="POST">
@@ -104,7 +118,7 @@
         <div class="modal-content2">
             <div class="close">&times;</div>
             <div class="modal-row2" id="mdt">
-                <input type="hidden" id="emel" name="emel" value="">
+                <input type="hidden" id="emel" name="emel" value="emel">
                 <input type="hidden" id="custom_id" name="custom_id" value="some_value">
                 <div class="label">Name:</div>
                 <div class="value" id="name"></div>
@@ -148,6 +162,8 @@
             var ref = this.getAttribute("data-ref");
             var mop = this.getAttribute("data-mop");
             var id = this.getAttribute("data-id");
+            var emel = this.getAttribute("data-emel");
+
 
             // Set modal content using the data attributes
             document.getElementById("name").innerHTML = name;
