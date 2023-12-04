@@ -104,46 +104,46 @@ def creacc(request):
             tent_pnum = form.cleaned_data['tent_pnum']
             tent_emel = form.cleaned_data['tent_emel']
             tent_pword = form.cleaned_data['tent_pword']
-
-            try:
-                tenant = Tenants.objects.create(
-                    tent_name=tent_name,
-                    username=uname,
-                    unit_type=unit_type,
-                    tent_pnum=tent_pnum,
-                    tent_emel=tent_emel,
-                    password=tent_pword
-                )
+        try:
+            tenant = Tenants.objects.create(
+                tent_name=tent_name,
+                username=uname,
+                unit_type=unit_type,
+                tent_pnum=tent_pnum,
+                tent_emel=tent_emel,
+                password=tent_pword
+            )
             
-                subject = 'Account Creation'
-                message = f'''
-                            Your Account Information are the following:
-                            - Username: {uname}
-                            - Password: {tent_pword}
-                        '''
-                from_email = 'renafjunior@gmail.com'
-                recipient_list = [ tent_emel]
-                send_mail(subject, message, from_email, recipient_list)
+            subject = 'Account Creation'
+            message = f'''
+                        Your Account Information are the following:
+                        - Username: {uname}
+                        - Password: {tent_pword}
+                    '''
+            from_email = 'renafjunior@gmail.com'
+            recipient_list = [ tent_emel]
+            send_mail(subject, message, from_email, recipient_list)
 
-                messages.success(request, "Account Created.")
-                return redirect('creacc')  # Redirect after successful submission
-            except IntegrityError as e:
-                messages.error(request, f"Error creating account: {e}")
-        else:
-            messages.error(request, "Form is not valid. Please check the form data.")
+            messages.success(request, "Account Created.")
+            return redirect('creacc')  # Redirect after successful submission
+        except IntegrityError as e:
+            messages.error(request, f"Error creating account: {e}")
     else:
         form = Tenantform()
     return render(request, 'creacc.html', {'form': form})
 
-def ad_hom(request):
+def ad_hom(request):  
+    locale.setlocale(locale.LC_ALL, 'fil_PH.UTF-8')
     book = Booked.objects.filter(approval_status='pending').order_by('date')
     tent = Tenants.objects.all().order_by('tent_name')
     prop = Units.objects.all()
 
     total_profit = calculate_total_profit()
+    if total_profit is not None:
+        formatted_total_profit = locale.currency(total_profit, grouping=True)
+    else:
+        formatted_total_profit = '0'  # or any default value you want to set
 
-    formatted_total_profit = '{:.2f}'.format(total_profit) if total_profit is not None else '0.00'
-    
     num_tenants = tent.count()
     num_unit = prop.count()
 
@@ -205,7 +205,8 @@ def contact(request):
 
         send_mail(subject, message, from_email, recipient_list)
 
-        return HttpResponse('Form submitted successfully. Thank you!')
+        messages.success(request, "Email Submitted Successfully. Thank you!")
+
     return render(request, 'contact.html')
 
 def vtour(request):  
@@ -215,33 +216,74 @@ def amnts(request):
     return render(request, 'amnts.html')
 
 
-def comp(request):
+def comp(request):  
     comp = Issues.objects.all()
+    bpay = Booked.objects.all()
     payment = Payment.objects.filter(status='Pending').order_by('date')
     context = {
         'comp': comp,
-        'pay': payment
+        'pay': payment,
+        'bookpay': bpay
     }
 
     if request.method == 'POST':
         action = request.POST.get('action')
         custom_id_value = request.POST.get('custom_id')
-        if action == 'approve':
-            payment = Payment.objects.get(pk=custom_id_value)
-            payment.status = 'Successful'
-            payment.save()
+        emel = request.POST.get('emel')
 
-        elif action == 'decline':
+        try:
             payment = Payment.objects.get(pk=custom_id_value)
-            payment.status = 'Decline'
-            payment.save()
+        except Payment.DoesNotExist:
+            payment = None
+        try:
+            booked_payment = Booked.objects.get(pk=custom_id_value)
+        except Booked.DoesNotExist:
+            booked_payment = None
+
+        if action == 'approve':
+            if payment:
+                # Handle 'approve' for Payment
+                payment.status = 'Successful'
+                payment.save()
+                
+            elif booked_payment:
+                booked_payment.delete()
+                subject = 'Payment Confirmed'
+                message = 'Dear user,\n\nYour payment has been confirmed. Please wait for an email regarding your user account.\n\nThank you for choosing our services!\n\nBest regards,\nThe Payment Confirmation Team'
+                from_email = settings.EMAIL_HOST_USER 
+                recipient_list = [emel]
+                try:
+                    send_mail(subject, message, from_email, recipient_list)
+                    print('Email sent successfully!')
+                except Exception as e:
+                    print(f'Error sending email: {e}')
+                pass
+            else:
+                # Handle the case where neither Payment nor Booked is found
+                messages.error(request, "Invalid Input.")
+        elif action == 'decline':
+            if payment:
+                payment.status = 'Decline'
+                payment.save()
+            elif booked_payment:
+                subject = 'Payment Declined'
+                message = 'Dear user,\n\nWe regret to inform you that your payment has been declined. If you have any questions or concerns, please contact our support team.\n\nThank you for considering our services.\n\nBest regards,\nThe Support Team'
+                from_email = settings.EMAIL_HOST_USER 
+                recipient_list = [emel]
+
+                try:
+                    send_mail(subject, message, from_email, recipient_list)
+                    print('Email sent successfully!')
+                except Exception as e:
+                    print(f'Error sending email: {e}')
+                pass
 
             messages.error(request, "Invalid Input.")
 
-    return render(request, 'comp.html', {**context})
+    return render(request, 'comp.html' ,{ **context })
 
 
-def req(request):
+def req(request):  
     book = Booked.objects.filter(approval_status='Pending').order_by('date')
     reqy = {
         'Booked': book
@@ -257,11 +299,7 @@ def req(request):
 
             subject = 'Booking Approved'
             message = ''' Your Booking is Approved
-
-                        Please pay for your rental fee for the completion of rental
-                        short term : 1000.00 
-                        6-months: 45000.00
-
+                        
                         To complete your payment, please use the following details:
 
                         Payment Method: Bank Transfer
@@ -298,10 +336,11 @@ def req(request):
 
             messages.error(request, "Invalid Input.")
 
+        
     return render(request, 'ad_req.html', reqy)
 
 
-def nav(request):
+def nav(request):  
     return render(request, 'navbar.html')
 
 
@@ -313,7 +352,7 @@ def pay(request, username):
         return redirect('book')
 
     context = {'username': username, 'tenant_id': tenant.id}
-
+    
     if request.method == 'POST':
         form = Paymentform(request.POST)
         if form.is_valid():
@@ -332,8 +371,8 @@ def pay(request, username):
                     ref=ref,
                     mop=mop,
                     amount=amount,
-                    tenant=tenant_id
-                )
+                    tenant=tenant_id  
+                                                    )
                 messages.success(request, "Payment Submitted.")
 
             except IntegrityError:
@@ -345,23 +384,22 @@ def pay(request, username):
 
     return render(request, 'payment.html', {'form': form, **context})
 
-
-def prop(request):
+def prop(request):  
     queryset = Units.objects.all()
     context = {
         'Units': queryset
     }
-    if request.method == 'POST':
-        form = Propform(request.POST)
+    if request.method == 'POST':       
+        form = Propform(request.POST)       
         if form.is_valid():
             untp = form.cleaned_data['unit_type']
-            blt = form.cleaned_data['unit_blt']
+            blt = form.cleaned_data['unit_blt'] 
             prc = form.cleaned_data['unt_price']
 
             try:
                 units = Units.objects.create(
                     unit_type=untp,
-                    unit_blt=blt,
+                    unit_blt=blt,  
                     unt_price=prc
                 )
                 messages.success(request, "Unit Created.")
@@ -375,8 +413,7 @@ def prop(request):
 
     return render(request, 'property.html', {'form': form, **context})
 
-
-def rep(request):
+def rep(request):  
     if request.method == 'GET':
         try:
             start_year = int(request.GET.get('start_year', datetime.now().year))
@@ -392,8 +429,7 @@ def rep(request):
                 end_date = datetime(end_year, end_month, last_day_end).date()
 
                 # Query the Payment model to get the total amount for the selected range of months
-                total_amount = Payment.objects.filter(date__range=(start_date, end_date)).aggregate(Sum('amount'))[
-                    'amount__sum']
+                total_amount = Payment.objects.filter(date__range=(start_date, end_date)).aggregate(Sum('amount'))['amount__sum']
 
                 # Prepare data to pass to the template
                 report_period = f'{start_date.strftime("%B %Y")} - {end_date.strftime("%B %Y")}'
@@ -426,13 +462,13 @@ def rep(request):
         pass
 
 
-@login_required(login_url='home')
-def admins(request):
+@login_required(login_url='home')  
+def admins(request):  
     return render(request, 'admins.html')
 
-
-@login_required(login_url='home')
+@login_required(login_url='home') 
 def tnt_hom(request):
+    locale.setlocale(locale.LC_ALL, 'fil_PH.UTF-8')
     username = request.GET.get('username', '')
 
     try:
@@ -471,32 +507,31 @@ def tnt_hom(request):
 
     return render(request, 'tnt_hom.html', context)
 
-
-def foot(request):
+def foot(request):  
     return render(request, 'footer.html')
 
 
-def book(request):
+def book(request):  
     if request.method == 'POST':
         form = Requestform(request.POST)
         if form.is_valid():
             nem = form.cleaned_data['name']
-            emel = form.cleaned_data['emel']
+            emel= form.cleaned_data['emel']
             unit = form.cleaned_data['unit']
             pnum = form.cleaned_data['pnum']
             date = form.cleaned_data['date']
             bookt = form.cleaned_data['bookt']
             try:
                 book = Booked.objects.create(
-                    name=nem,
-                    emel=emel,
-                    unit=unit,
-                    pnum=pnum,
-                    date=date,
-                    bookt=bookt,
+                    name = nem,
+                    emel = emel,
+                    unit= unit,
+                    pnum = pnum,
+                    date = date,
+                    bookt = bookt,
                 )
                 request.session['booking_id'] = book.id
-                messages.success(request, '''Booking Submitted
+                messages.success(request,'''Booking Submitted
                 Thank you for submitting your booking. 
                                  Please wait for confirmation. ''')
             except IntegrityError:
@@ -505,8 +540,7 @@ def book(request):
         form = Requestform()
     return render(request, 'booking.html', {'form': form})
 
-
-def bookpay(request):
+def bookpay(request):  
     booking_id = request.session.get('booking_id')
     print(f"Booking ID from session: {booking_id}")
     booking = get_object_or_404(Booked, id=booking_id) if booking_id else None
@@ -534,8 +568,12 @@ def bookpay(request):
                 messages.error(request, "Invalid Input.")
     else:
         form = Payform()
-
+    
     return render(request, 'bookpay.html', {'form': form})
+
+
+
+
 
 
 
