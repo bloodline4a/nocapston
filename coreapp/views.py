@@ -14,7 +14,6 @@ from calendar import monthrange
 from django.http import HttpResponse
 from django.conf import settings
 from django.http import JsonResponse
-import locale
 from django.core.serializers import serialize
 from django.http import JsonResponse
 import json
@@ -131,19 +130,15 @@ def creacc(request):
     else:
         form = Tenantform()
     return render(request, 'creacc.html', {'form': form})
-
-def ad_hom(request):  
-    locale.setlocale(locale.LC_ALL, 'fil_PH.UTF-8')
+def ad_hom(request):
     book = Booked.objects.filter(approval_status='pending').order_by('date')
     tent = Tenants.objects.all().order_by('tent_name')
     prop = Units.objects.all()
 
     total_profit = calculate_total_profit()
-    if total_profit is not None:
-        formatted_total_profit = locale.currency(total_profit, grouping=True)
-    else:
-        formatted_total_profit = '0'  # or any default value you want to set
 
+    formatted_total_profit = '{:.2f}'.format(total_profit) if total_profit is not None else '0.00'
+    
     num_tenants = tent.count()
     num_unit = prop.count()
 
@@ -352,7 +347,7 @@ def pay(request, username):
         return redirect('book')
 
     context = {'username': username, 'tenant_id': tenant.id}
-    
+
     if request.method == 'POST':
         form = Paymentform(request.POST)
         if form.is_valid():
@@ -371,8 +366,8 @@ def pay(request, username):
                     ref=ref,
                     mop=mop,
                     amount=amount,
-                    tenant=tenant_id  
-                                                    )
+                    tenant=tenant_id
+                )
                 messages.success(request, "Payment Submitted.")
 
             except IntegrityError:
@@ -468,7 +463,6 @@ def admins(request):
 
 @login_required(login_url='home') 
 def tnt_hom(request):
-    locale.setlocale(locale.LC_ALL, 'fil_PH.UTF-8')
     username = request.GET.get('username', '')
 
     try:
